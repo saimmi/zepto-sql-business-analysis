@@ -1,0 +1,1210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Zepto Business Analysis Report</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+
+body{
+  font-family:Georgia, 'Times New Roman', serif;
+  font-size:15px;
+  line-height:1.7;
+  background:#ffffff;
+  color:#1a1a1a;
+}
+
+.report{
+  max-width:1100px;
+  margin:0 auto;
+  padding:3rem 4rem;
+  font-size:15px;
+}
+
+/* ── COVER ── */
+.cover{
+  border-bottom:3px solid #1a3a5c;
+  padding-bottom:2.2rem;
+  margin-bottom:2.5rem;
+}
+
+.tag{
+  display:inline-block;
+  background:#1a3a5c;
+  color:#e8f0f8;
+  font-family:'Segoe UI', Arial, sans-serif;
+  font-size:10px;
+  font-weight:600;
+  letter-spacing:.12em;
+  padding:4px 12px;
+  border-radius:4px;
+  margin-bottom:1.2rem;
+  text-transform:uppercase;
+}
+
+.report-title{
+  font-family:'Segoe UI', Arial, sans-serif;
+  font-size:32px;
+  font-weight:700;
+  line-height:1.2;
+  color:#0f2540;
+  margin-bottom:.8rem;
+}
+
+.report-subtitle{
+  font-family:'Segoe UI', Arial, sans-serif;
+  font-size:15px;
+  color:#4a5568;
+  margin-bottom:1.6rem;
+  line-height:1.75;
+}
+
+.meta-row{
+  display:flex;
+  gap:2.2rem;
+  flex-wrap:wrap;
+}
+
+.meta-item{
+  font-family:'Segoe UI', Arial, sans-serif;
+  font-size:12px;
+  color:#8a96a3;
+}
+
+.meta-item span{
+  color:#334155;
+  font-weight:600;
+}
+
+/* ── EXEC SUMMARY ── */
+.exec-box{
+  background:#f4f7fb;
+  border-left:4px solid #1a3a5c;
+  border-radius:0 8px 8px 0;
+  padding:1.3rem 1.6rem;
+  margin:2rem 0;
+}
+
+.exec-box h3{
+  font-family:'Segoe UI', Arial, sans-serif;
+  font-size:10px;
+  text-transform:uppercase;
+  letter-spacing:.1em;
+  color:#1a3a5c;
+  font-weight:700;
+  margin-bottom:.6rem;
+}
+
+.exec-box p{
+  font-size:15px;
+  line-height:1.85;
+  color:#334155;
+}
+
+/* ── KPI GRID ── */
+.kpi-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit, minmax(160px, 1fr));
+  gap:16px;
+  margin:2rem 0;
+}
+
+.kpi{
+  background:#ffffff;
+  border:1px solid #dde5f0;
+  border-radius:12px;
+  padding:1.2rem 1rem;
+  box-shadow:0 2px 8px rgba(26,58,92,0.07);
+}
+
+.kpi-num{
+  font-family:'Segoe UI', Arial, sans-serif;
+  font-size:26px;
+  font-weight:700;
+  color:#1a3a5c;
+  line-height:1;
+  margin-bottom:6px;
+}
+
+.kpi-label{
+  font-family:'Segoe UI', Arial, sans-serif;
+  font-size:12px;
+  color:#64748b;
+  line-height:1.4;
+  font-weight:500;
+}
+
+/* ── SECTION HEADER ── */
+.section-header{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  margin:2.8rem 0 1.2rem;
+}
+
+.section-num{
+  background:#1a3a5c;
+  color:#e8f0f8;
+  font-family:'Segoe UI', Arial, sans-serif;
+  font-size:12px;
+  font-weight:700;
+  width:28px;
+  height:28px;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex-shrink:0;
+}
+
+.section-title{
+  font-family:'Segoe UI', Arial, sans-serif;
+  font-size:20px;
+  font-weight:700;
+  color:#0f2540;
+}
+
+.section-divider{
+  border:none;
+  border-top:1px solid #e2e8f0;
+  margin:2.5rem 0;
+}
+
+/* ── PHASE LABEL ── */
+.phase-label{
+  font-family:'Segoe UI', Arial, sans-serif;
+  font-size:10px;
+  font-weight:700;
+  text-transform:uppercase;
+  letter-spacing:.1em;
+  color:#94a3b8;
+  margin:2.2rem 0 .9rem;
+  padding-bottom:.4rem;
+  border-bottom:1px solid #e8edf3;
+}
+
+/* ── METHODOLOGY GRID ── */
+.methodology-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:16px;
+  margin:1rem 0;
+}
+
+.meth-item{
+  padding:1rem 1.1rem;
+  border:1px solid #dde5f0;
+  border-radius:10px;
+  background:#f8fafc;
+}
+
+.meth-item h4{
+  font-family:'Segoe UI', Arial, sans-serif;
+  font-size:13px;
+  font-weight:700;
+  color:#1a3a5c;
+  margin-bottom:.4rem;
+}
+
+.meth-item p{
+  font-family:'Segoe UI', Arial, sans-serif;
+  font-size:13px;
+  color:#4a5568;
+  line-height:1.6;
+}
+
+/* ── ANALYSIS CARD ── */
+.analysis-card{
+  border:1px solid #dde5f0;
+  border-radius:12px;
+  overflow:hidden;
+  margin-bottom:1.6rem;
+}
+
+.card-header{
+  padding:.85rem 1.2rem;
+  background:#f4f7fb;
+  border-bottom:1px solid #dde5f0;
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+
+.card-num{
+  font-family:'Segoe UI', Arial, sans-serif;
+  font-size:11px;
+  font-weight:600;
+  color:#94a3b8;
+  min-width:24px;
+}
+
+.card-title{
+  font-family:'Segoe UI', Arial, sans-serif;
+  font-size:15px;
+  font-weight:700;
+  color:#0f2540;
+}
+
+.card-body{
+  padding:1.3rem;
+}
+
+/* ── BUSINESS PROBLEM ── */
+.biz-problem{
+  font-family:'Segoe UI', Arial, sans-serif;
+  font-size:14px;
+  color:#4a5568;
+  line-height:1.75;
+  margin-bottom:1rem;
+  padding:.6rem .9rem;
+  background:#f8fafc;
+  border-radius:6px;
+  border-left:3px solid #94a3b8;
+}
+
+.biz-problem strong{
+  color:#1a3a5c;
+  font-weight:700;
+}
+
+/* ── SQL BLOCK ── */
+.sql-block{
+  background:#f0f4f9;
+  border:1px solid #cdd9e8;
+  border-radius:10px;
+  padding:1rem 1.2rem;
+  margin:.9rem 0;
+  overflow-x:auto;
+}
+
+.sql-block pre{
+  font-family:'Courier New', Courier, monospace;
+  font-size:13.5px;
+  line-height:1.75;
+  color:#243447;
+  white-space:pre;
+}
+
+.kw{color:#005cc5;font-weight:700;}
+.fn{color:#6f42c1;}
+.str{color:#22863a;}
+.cm{color:#6a737d;font-style:italic;}
+
+/* ── INSIGHT BOXES ── */
+.insight-row{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:16px;
+  margin-top:1rem;
+}
+
+.insight-box{
+  border-radius:8px;
+  padding:1rem 1.1rem;
+}
+
+.insight-box.find{
+  background:#eef4fb;
+  border:1px solid #b5d0ee;
+}
+
+.insight-box.suggest{
+  background:#f0f8f4;
+  border:1px solid #9fd0b8;
+}
+
+.insight-box h4{
+  font-family:'Segoe UI', Arial, sans-serif;
+  font-size:10px;
+  font-weight:700;
+  text-transform:uppercase;
+  letter-spacing:.1em;
+  margin-bottom:.5rem;
+}
+
+.insight-box.find h4{color:#1a5080;}
+.insight-box.suggest h4{color:#0f6048;}
+
+.insight-box p{
+  font-size:14px;
+  line-height:1.8;
+  color:#334155;
+}
+
+/* ── FINDING FULL / SUGGEST FULL ── */
+.finding-full{
+  background:#eef4fb;
+  border:1px solid #b5d0ee;
+  border-radius:8px;
+  padding:1rem 1.1rem;
+  margin-top:.9rem;
+}
+
+.finding-full h4{
+  font-family:'Segoe UI', Arial, sans-serif;
+  font-size:10px;
+  font-weight:700;
+  text-transform:uppercase;
+  letter-spacing:.1em;
+  color:#1a5080;
+  margin-bottom:.5rem;
+}
+
+.finding-full p{
+  font-size:14px;
+  line-height:1.8;
+  color:#334155;
+}
+
+.suggest-full{
+  background:#f0f8f4;
+  border:1px solid #9fd0b8;
+  border-radius:8px;
+  padding:1rem 1.1rem;
+  margin-top:.9rem;
+}
+
+.suggest-full h4{
+  font-family:'Segoe UI', Arial, sans-serif;
+  font-size:10px;
+  font-weight:700;
+  text-transform:uppercase;
+  letter-spacing:.1em;
+  color:#0f6048;
+  margin-bottom:.5rem;
+}
+
+.suggest-full p{
+  font-size:14px;
+  line-height:1.8;
+  color:#334155;
+}
+
+/* ── RISK BOX ── */
+.risk-box{
+  background:#fdf3f0;
+  border:1px solid #e8b5a0;
+  border-radius:8px;
+  padding:1rem 1.1rem;
+  margin-top:.9rem;
+}
+
+.risk-box h4{
+  font-family:'Segoe UI', Arial, sans-serif;
+  font-size:10px;
+  font-weight:700;
+  text-transform:uppercase;
+  letter-spacing:.1em;
+  color:#8b2e10;
+  margin-bottom:.5rem;
+}
+
+.risk-box p{
+  font-size:14px;
+  line-height:1.8;
+  color:#334155;
+}
+
+/* ── HIGHLIGHT STAT ── */
+.highlight-stat{
+  font-weight:700;
+  color:#1a5080;
+}
+
+/* ── ADV LABEL ── */
+.adv-label{
+  display:inline-block;
+  font-family:'Segoe UI', Arial, sans-serif;
+  font-size:9px;
+  font-weight:700;
+  padding:2px 8px;
+  border-radius:4px;
+  background:#1a3a5c;
+  color:#e8f0f8;
+  margin-left:8px;
+  vertical-align:middle;
+  text-transform:uppercase;
+  letter-spacing:.06em;
+}
+
+/* ── RECOMMENDATIONS ── */
+.rec-item{
+  display:flex;
+  gap:14px;
+  margin-bottom:1rem;
+  padding:1rem 1.2rem;
+  border:1px solid #dde5f0;
+  border-radius:10px;
+  align-items:flex-start;
+}
+
+.rec-icon{
+  width:34px;
+  height:34px;
+  border-radius:50%;
+  background:#1a3a5c;
+  color:#e8f0f8;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-family:'Segoe UI', Arial, sans-serif;
+  font-size:12px;
+  font-weight:700;
+  flex-shrink:0;
+  margin-top:2px;
+}
+
+.rec-text h4{
+  font-family:'Segoe UI', Arial, sans-serif;
+  font-size:15px;
+  font-weight:700;
+  margin-bottom:4px;
+  color:#0f2540;
+}
+
+.rec-text p{
+  font-family:'Segoe UI', Arial, sans-serif;
+  font-size:14px;
+  line-height:1.75;
+  color:#4a5568;
+}
+
+/* ── CONCLUSION ── */
+.conclusion{
+  background:#f4f7fb;
+  border-radius:12px;
+  padding:1.6rem;
+  margin-top:2rem;
+  border:1px solid #dde5f0;
+}
+
+.conclusion h3{
+  font-family:'Segoe UI', Arial, sans-serif;
+  font-size:16px;
+  font-weight:700;
+  margin-bottom:.9rem;
+  color:#0f2540;
+}
+
+.conclusion p{
+  font-size:15px;
+  line-height:1.9;
+  color:#334155;
+}
+
+/* ── QUERY SCREENSHOT ── */
+.query-shot{
+  margin:.8rem 0 1rem;
+  text-align:center;
+}
+
+.query-shot img{
+  width:60%;
+  max-width:420px;
+  border-radius:8px;
+  border:1px solid #dde5f0;
+}
+
+/* ── FOOTER LINKS ── */
+.footer-links{
+  margin-top:2.5rem;
+}
+
+.footer-links h3{
+  font-family:'Segoe UI', Arial, sans-serif;
+  font-size:16px;
+  font-weight:700;
+  margin-bottom:1rem;
+  color:#0f2540;
+}
+
+.link-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:14px;
+}
+
+.social-card{
+  text-decoration:none;
+  padding:1rem 1.2rem;
+  border-radius:10px;
+  border:1px solid #dde5f0;
+  background:#f8fafc;
+  display:block;
+  transition:transform .2s ease, box-shadow .2s ease;
+}
+
+.social-card:hover{
+  transform:translateY(-2px);
+  box-shadow:0 6px 18px rgba(26,58,92,0.1);
+  background:#ffffff;
+}
+
+.social-title{
+  font-family:'Segoe UI', Arial, sans-serif;
+  font-size:14px;
+  font-weight:700;
+  color:#1a3a5c;
+  margin-bottom:5px;
+}
+
+.social-sub{
+  font-family:'Segoe UI', Arial, sans-serif;
+  font-size:13px;
+  line-height:1.5;
+  color:#64748b;
+}
+
+/* ── PRINT ── */
+@media print{
+  body{font-size:13px;}
+  .report{padding:1.5rem 2.5rem; max-width:100%;}
+  .analysis-card{page-break-inside:avoid;}
+  .kpi-grid{grid-template-columns:repeat(5,1fr);}
+  .social-card:hover{transform:none;box-shadow:none;}
+}
+</style>
+</head>
+<body>
+<div class="report">
+
+<!-- COVER -->
+<div class="cover">
+  <div class="tag">Business Analysis Case Study</div>
+  <h1 class="report-title">Zepto Inventory &amp; Pricing<br>Business Analysis Using SQL</h1>
+  <p class="report-subtitle">A structured SQL-based investigation into Zepto's product pricing strategy, discount effectiveness, inventory health, and revenue opportunity across 14 product categories and 3,731 SKUs.</p>
+  <div class="meta-row">
+    <div class="meta-item">Platform&nbsp;<span>Zepto (Quick Commerce)</span></div>
+    <div class="meta-item">Tool&nbsp;<span>PostgreSQL / pgAdmin 4</span></div>
+    <div class="meta-item">Dataset&nbsp;<span>Kaggle — Zepto Inventory</span></div>
+    <div class="meta-item">Records&nbsp;<span>3,731 SKUs · 14 Categories</span></div>
+  </div>
+</div>
+
+<!-- EXEC SUMMARY -->
+<div class="exec-box">
+  <h3>Executive Summary</h3>
+  <p>This case study applies SQL-driven analysis to Zepto's grocery inventory dataset to uncover patterns in pricing, stock availability, discount dependency, and revenue generation. The analysis reveals that Zepto operates as a mass-market, value-driven platform with strong concentration in FMCG categories. Key findings include an estimated <strong>₹8.91 million revenue loss from out-of-stock products</strong>, a clear consumer preference for small-pack formats, and a pricing structure heavily weighted toward the budget and mid-range segments. Strategic opportunities exist in inventory replenishment for high-stockout categories, margin optimization in discount-heavy segments, and prioritized investment in top revenue-contributing categories.</p>
+</div>
+
+<!-- KPI GRID -->
+<div class="kpi-grid">
+  <div class="kpi"><div class="kpi-num">3,731</div><div class="kpi-label">Total SKUs Analyzed</div></div>
+  <div class="kpi"><div class="kpi-num">14</div><div class="kpi-label">Product Categories</div></div>
+  <div class="kpi"><div class="kpi-num">453</div><div class="kpi-label">Out-of-Stock Products</div></div>
+  <div class="kpi"><div class="kpi-num">87.8%</div><div class="kpi-label">Inventory Availability</div></div>
+  <div class="kpi"><div class="kpi-num">₹8.91M</div><div class="kpi-label">Revenue at Risk</div></div>
+</div>
+
+<!-- SECTION 1 -->
+<div class="section-header">
+  <div class="section-num">1</div>
+  <div class="section-title">Methodology &amp; Data Overview</div>
+</div>
+<div class="methodology-grid">
+  <div class="meth-item"><h4>Data Source</h4><p>Kaggle — Zepto Inventory Dataset. Imported into PostgreSQL via pgAdmin 4 after CSV conversion.</p></div>
+  <div class="meth-item"><h4>Analytical Scope</h4><p>Pricing structure, discount strategy, stock availability, revenue estimation, category performance, and product segmentation.</p></div>
+  <div class="meth-item"><h4>SQL Techniques</h4><p>Aggregate functions, CASE statements, window functions (RANK, SUM OVER), subqueries, and conditional filtering.</p></div>
+</div>
+
+<hr class="section-divider">
+
+<!-- SECTION 2 -->
+<div class="section-header">
+  <div class="section-num">2</div>
+  <div class="section-title">Data Exploration &amp; Quality Assessment</div>
+</div>
+
+<div class="phase-label">Phase 1 — Exploration</div>
+
+<div class="analysis-card">
+  <div class="card-header"><span class="card-num">2.1</span><span class="card-title">Record Count &amp; Dataset Scale</span></div>
+  <div class="card-body">
+    <div class="biz-problem"><strong>Objective:</strong> Establish the total scope of the inventory dataset before analysis begins.</div>
+    <div class="sql-block"><pre><span class="kw">SELECT</span> <span class="fn">COUNT</span>(*) <span class="kw">AS</span> total_records
+<span class="kw">FROM</span> zepto;</pre></div>
+    <div class="finding-full"><h4>Finding</h4><p>The dataset contains <span class="highlight-stat">3,731 product records</span>, providing a statistically robust base for category-level and platform-level business conclusions.</p></div>
+    <div class="suggest-full"><h4>Analytical Suggestion</h4><p>A dataset of ~3,700+ SKUs is sufficient to draw reliable segment-level insights. However, for time-series analysis (demand trends, seasonal patterns), this snapshot should be complemented with historical inventory logs. Benchmarking this count against Zepto's reported catalog size (~8,000+ SKUs on the app) would also reveal the dataset's coverage rate.</p></div>
+  </div>
+</div>
+
+<div class="analysis-card">
+  <div class="card-header"><span class="card-num">2.2</span><span class="card-title">Null Value &amp; Data Quality Check</span></div>
+  <div class="card-body">
+    <div class="biz-problem"><strong>Objective:</strong> Verify data completeness before drawing business conclusions.</div>
+    <div class="sql-block"><pre><span class="kw">SELECT</span> * <span class="kw">FROM</span> zepto
+<span class="kw">WHERE</span> name <span class="kw">IS NULL</span>
+   <span class="kw">OR</span> category <span class="kw">IS NULL</span>
+   <span class="kw">OR</span> mrp <span class="kw">IS NULL</span>
+   <span class="kw">OR</span> discountPercent <span class="kw">IS NULL</span>
+   <span class="kw">OR</span> discountedSellingPrice <span class="kw">IS NULL</span>
+   <span class="kw">OR</span> weightInGms <span class="kw">IS NULL</span>
+   <span class="kw">OR</span> availableQuantity <span class="kw">IS NULL</span>;</pre></div>
+    <div class="finding-full"><h4>Finding</h4><p>No null values were detected across any critical column. The dataset is complete and structurally sound, making it reliable for business analysis without imputation.</p></div>
+    <div class="suggest-full"><h4>Analytical Suggestion</h4><p>While structural completeness is confirmed, semantic quality should also be verified — for instance, checking whether product names are standardized (no abbreviations or encoding errors), whether category labels are consistent, and whether weight values are in correct units. Clean data at entry point reflects well-maintained upstream data pipelines.</p></div>
+  </div>
+</div>
+
+<div class="analysis-card">
+  <div class="card-header"><span class="card-num">2.3</span><span class="card-title">Category Distribution</span></div>
+  <div class="card-body">
+    <div class="biz-problem"><strong>Objective:</strong> Identify the breadth of Zepto's product portfolio across categories.</div>
+    <div class="sql-block"><pre><span class="kw">SELECT DISTINCT</span> category
+<span class="kw">FROM</span> zepto
+<span class="kw">ORDER BY</span> category;</pre></div>
+    <div class="finding-full"><h4>Finding</h4><p>Zepto's inventory spans <span class="highlight-stat">14 distinct product categories</span> ranging from perishables (Fruits &amp; Vegetables, Meats &amp; Fish) to FMCG staples (Munchies, Biscuits, Beverages) and household essentials (Home &amp; Cleaning, Personal Care).</p></div>
+    <div class="suggest-full"><h4>Analytical Suggestion</h4><p>Fourteen categories reflect a deliberately curated quick-commerce portfolio. Unlike traditional retailers with 50–100 categories, Zepto's narrow but deep catalog signals an "essential purchases" positioning. From a business lens, category rationalization should be evaluated periodically — each category must justify its logistics cost and consumer demand frequency.</p></div>
+  </div>
+</div>
+
+<div class="analysis-card">
+  <div class="card-header"><span class="card-num">2.4</span><span class="card-title">Stock Availability Overview</span></div>
+  <div class="card-body">
+    <div class="biz-problem"><strong>Objective:</strong> Understand the ratio of in-stock vs out-of-stock products across the platform.</div>
+    <div class="sql-block"><pre><span class="kw">SELECT</span> outOfStock,
+       <span class="fn">COUNT</span>(sku_id) <span class="kw">AS</span> total_products
+<span class="kw">FROM</span> zepto
+<span class="kw">GROUP BY</span> outOfStock;</pre></div>
+    <div class="insight-row">
+      <div class="insight-box find"><h4>Finding</h4><p><span class="highlight-stat">3,278 products in stock</span> (87.8%) and <span class="highlight-stat">453 out of stock</span> (12.1%). While the headline availability rate appears healthy, a 12% unavailability rate in a quick-commerce context — where instant delivery is the core promise — is a material operational concern.</p></div>
+      <div class="insight-box suggest"><h4>Analytical Suggestion</h4><p>In quick-commerce, acceptable stockout rates are typically below 5%. A 12.1% rate warrants investigation by category to identify whether stockouts are concentrated in specific segments (e.g., perishables, high-velocity SKUs) and requires a root-cause analysis of replenishment lag times.</p></div>
+    </div>
+  </div>
+</div>
+
+<div class="analysis-card">
+  <div class="card-header"><span class="card-num">2.5</span><span class="card-title">Duplicate SKU Identification</span></div>
+  <div class="card-body">
+    <div class="biz-problem"><strong>Objective:</strong> Detect product name duplication that may indicate variant-level SKU management or data issues.</div>
+    <div class="sql-block"><pre><span class="kw">SELECT</span> name,
+       <span class="fn">COUNT</span>(sku_id) <span class="kw">AS</span> number_of_skus
+<span class="kw">FROM</span> zepto
+<span class="kw">GROUP BY</span> name
+<span class="kw">HAVING</span> <span class="fn">COUNT</span>(sku_id) > 1
+<span class="kw">ORDER BY</span> number_of_skus <span class="kw">DESC</span>;</pre></div>
+    <div class="insight-row">
+      <div class="insight-box find"><h4>Finding</h4><p>Approximately <span class="highlight-stat">1,214 products</span> appear under the same name with multiple SKUs. This represents 32.5% of the catalog — indicating widespread variant-level differentiation (pack sizes, weights, or flavors under a single brand name).</p></div>
+      <div class="insight-box suggest"><h4>Analytical Suggestion</h4><p>Multi-SKU products should be analyzed as product families, not individual items. A parent-child SKU taxonomy (e.g., "Amul Butter 100g", "Amul Butter 500g") would improve analytics precision — allowing per-variant demand modeling and preventing inflated count-based metrics.</p></div>
+    </div>
+  </div>
+</div>
+
+<hr class="section-divider">
+
+<!-- SECTION 3 -->
+<div class="section-header">
+  <div class="section-num">3</div>
+  <div class="section-title">Data Cleaning</div>
+</div>
+
+<div class="analysis-card">
+  <div class="card-header"><span class="card-num">3.1</span><span class="card-title">Invalid Pricing Detection &amp; Removal</span></div>
+  <div class="card-body">
+    <div class="biz-problem"><strong>Objective:</strong> Identify and remove records with erroneous pricing before any revenue or discount analysis is performed.</div>
+    <div class="sql-block"><pre><span class="cm">-- Identify invalid records</span>
+<span class="kw">SELECT</span> * <span class="kw">FROM</span> zepto
+<span class="kw">WHERE</span> mrp = 0 <span class="kw">OR</span> discountedSellingPrice = 0;
+
+<span class="cm">-- Remove zero-MRP records</span>
+<span class="kw">DELETE FROM</span> zepto
+<span class="kw">WHERE</span> mrp = 0;
+
+<span class="cm">-- Convert paise to rupees</span>
+<span class="kw">UPDATE</span> zepto
+<span class="kw">SET</span> mrp = mrp / 100.0,
+    discountedSellingPrice = discountedSellingPrice / 100.0;</pre></div>
+    <div class="finding-full"><h4>Finding</h4><p>Products with MRP = 0 were identified as erroneous entries and removed. Pricing data was stored in paise and required division by 100 for rupee-denominated analysis — a common raw data formatting issue when sourcing from e-commerce APIs.</p></div>
+    <div class="suggest-full"><h4>Analytical Suggestion</h4><p>In production analytics pipelines, zero-price records should trigger automated data quality alerts at ingestion. For this dataset, logging the count of deleted records and their category distribution would ensure no systemic data gap was introduced by the cleaning step.</p></div>
+  </div>
+</div>
+
+<hr class="section-divider">
+
+<!-- SECTION 4 -->
+<div class="section-header">
+  <div class="section-num">4</div>
+  <div class="section-title">Core Business Analysis</div>
+</div>
+
+<div class="phase-label">Category &amp; Product Performance</div>
+
+<div class="analysis-card">
+  <div class="card-header"><span class="card-num">4.1</span><span class="card-title">Top 10 Categories by Product Count</span></div>
+  <div class="card-body">
+    <div class="biz-problem"><strong>Business Problem:</strong> Which categories have the widest product variety, indicating strategic priority within Zepto's catalog?</div>
+    <div class="sql-block"><pre><span class="kw">SELECT</span> category,
+       <span class="fn">COUNT</span>(*) <span class="kw">AS</span> total_products
+<span class="kw">FROM</span> zepto
+<span class="kw">GROUP BY</span> category
+<span class="kw">ORDER BY</span> total_products <span class="kw">DESC</span>
+<span class="kw">LIMIT</span> 10;</pre></div>
+    <div class="query-shot"><img src="images/Q1.png" alt="SQL Query Output — Top 10 Categories"></div>
+    <div class="insight-row">
+      <div class="insight-box find"><h4>Finding</h4><p>Munchies and Cooking Essentials lead the catalog with the highest SKU counts, followed by Packaged Food, Ice Cream &amp; Desserts, and Chocolates &amp; Candies. These five categories collectively dominate the inventory breadth.</p></div>
+      <div class="insight-box suggest"><h4>Analytical Suggestion</h4><p>High SKU count is a supply-side signal, not necessarily a demand signal. Cross-referencing SKU count with category revenue contribution and sell-through rate will identify whether breadth in Munchies and Cooking Essentials is justified by consumer demand — or whether it's creating unnecessary inventory complexity.</p></div>
+    </div>
+  </div>
+</div>
+
+<div class="analysis-card">
+  <div class="card-header"><span class="card-num">4.2</span><span class="card-title">Top 10 Most Expensive Products</span></div>
+  <div class="card-body">
+    <div class="biz-problem"><strong>Business Problem:</strong> Identify premium-priced products that anchor the upper end of Zepto's pricing spectrum.</div>
+    <div class="sql-block"><pre><span class="kw">SELECT</span> name, category, mrp
+<span class="kw">FROM</span> zepto
+<span class="kw">ORDER BY</span> mrp <span class="kw">DESC</span>
+<span class="kw">LIMIT</span> 10;</pre></div>
+    <div class="insight-row">
+      <div class="insight-box find"><h4>Finding</h4><p>Premium products are concentrated in Cooking Essentials (olive oil, ghee) and Personal Care (diapers). Borges Extra Light Olive Oil and Pampers variants command the highest MRP values, signaling aspirational FMCG purchase behavior among Zepto's urban customer base.</p></div>
+      <div class="insight-box suggest"><h4>Analytical Suggestion</h4><p>Premium products serve dual purposes — they elevate perceived platform quality and generate higher absolute margin per transaction even at moderate discount rates. Monitoring the sell-through velocity of these items relative to budget alternatives helps calibrate optimal inventory allocation for premium vs. mass SKUs.</p></div>
+    </div>
+  </div>
+</div>
+
+<div class="analysis-card">
+  <div class="card-header"><span class="card-num">4.3</span><span class="card-title">Top 10 Highest-Discounted Products</span></div>
+  <div class="card-body">
+    <div class="biz-problem"><strong>Business Problem:</strong> Identify products receiving the most aggressive promotional pricing — and assess whether this reflects demand stimulation or margin erosion risk.</div>
+    <div class="sql-block"><pre><span class="kw">SELECT DISTINCT</span> name, category, mrp,
+       discountedSellingPrice, discountPercent
+<span class="kw">FROM</span> zepto
+<span class="kw">ORDER BY</span> discountPercent <span class="kw">DESC</span>
+<span class="kw">LIMIT</span> 10;</pre></div>
+    <div class="insight-row">
+      <div class="insight-box find"><h4>Finding</h4><p>Discounts reach as high as <span class="highlight-stat">50–51%</span>, primarily in Biscuits, Cooking Essentials, Dairy, and Packaged Food. This level of promotional depth suggests either manufacturer-funded trade promotions or platform-subsidized discounting to drive category adoption.</p></div>
+      <div class="insight-box suggest"><h4>Analytical Suggestion</h4><p>Discounts above 40% should be evaluated on a product-level P&amp;L basis. If platform-funded, these promotions are essentially customer acquisition spend — and should be measured in terms of basket size uplift, repeat purchase rate, and customer lifetime value, not just immediate revenue impact.</p></div>
+    </div>
+  </div>
+</div>
+
+<div class="phase-label">Stock &amp; Availability Analysis</div>
+
+<div class="analysis-card">
+  <div class="card-header"><span class="card-num">4.4</span><span class="card-title">High-MRP Products Currently Out of Stock</span></div>
+  <div class="card-body">
+    <div class="biz-problem"><strong>Business Problem:</strong> Premium products that are unavailable create compounded risk — high revenue loss per unit and negative experience for high-value customers.</div>
+    <div class="sql-block"><pre><span class="kw">SELECT DISTINCT</span> name, category, mrp
+<span class="kw">FROM</span> zepto
+<span class="kw">WHERE</span> outOfStock = <span class="kw">TRUE</span>
+  <span class="kw">AND</span> mrp > 300
+<span class="kw">ORDER BY</span> mrp <span class="kw">DESC</span>;</pre></div>
+    <div class="insight-row">
+      <div class="insight-box find"><h4>Finding</h4><p>Several high-value products including premium ghee, baby care, flour, and spice products are out of stock. These are items with MRP &gt;₹300 where a single stockout event translates to a significant lost revenue opportunity per potential transaction.</p></div>
+      <div class="insight-box suggest"><h4>Analytical Suggestion</h4><p>High-MRP stockouts should trigger priority replenishment alerts. Implementing a tiered restocking SLA — where products above ₹300 MRP have a shorter replenishment cycle than budget items — would protect both revenue and customer satisfaction for the platform's most valuable SKUs.</p></div>
+    </div>
+  </div>
+</div>
+
+<div class="analysis-card">
+  <div class="card-header"><span class="card-num">4.5</span><span class="card-title">Category-Wise Out-of-Stock Risk Rate</span></div>
+  <div class="card-body">
+    <div class="biz-problem"><strong>Business Problem:</strong> Identify which categories face the highest structural stockout risk — creating recurring customer dissatisfaction and missed revenue.</div>
+    <div class="sql-block"><pre><span class="kw">SELECT</span> category,
+       <span class="fn">COUNT</span>(*) <span class="kw">AS</span> total_products,
+       <span class="fn">SUM</span>(<span class="kw">CASE WHEN</span> outOfStock = <span class="kw">TRUE THEN</span> 1 <span class="kw">ELSE</span> 0 <span class="kw">END</span>) <span class="kw">AS</span> oos_products,
+       <span class="fn">ROUND</span>(
+           <span class="fn">SUM</span>(<span class="kw">CASE WHEN</span> outOfStock = <span class="kw">TRUE THEN</span> 1 <span class="kw">ELSE</span> 0 <span class="kw">END</span>) * 100.0 / <span class="fn">COUNT</span>(*),
+       2) <span class="kw">AS</span> stockout_pct
+<span class="kw">FROM</span> zepto
+<span class="kw">GROUP BY</span> category
+<span class="kw">ORDER BY</span> stockout_pct <span class="kw">DESC</span>;</pre></div>
+    <div class="query-shot"><img src="images/Q2.png" alt="SQL Query Output — Stockout Risk"></div>
+    <div class="finding-full"><h4>Finding</h4><p><span class="highlight-stat">Biscuits leads with ~28.6% stockout rate</span>, followed by Beverages and Dairy, Bread &amp; Batter. These categories show systemic replenishment gaps that likely reflect supply chain constraints, high consumer velocity, or sub-optimal safety stock thresholds.</p></div>
+    <div class="suggest-full"><h4>Analytical Suggestion</h4><p>A 28% stockout rate in Biscuits — a high-frequency, habitual purchase category — is operationally significant. Zepto should calculate category-level reorder points using historical velocity data. For Biscuits and Beverages, automated low-stock alerts at 20% remaining inventory (rather than 0%) would allow proactive restocking before customer-facing stockouts occur.</p></div>
+    <div class="risk-box"><h4>Business Risk</h4><p>In quick-commerce, customers who encounter a stockout often switch platforms entirely for that session — and may not return. High stockout rates in impulse-purchase categories like Biscuits have an outsized churn impact relative to their individual transaction value.</p></div>
+  </div>
+</div>
+
+<div class="analysis-card">
+  <div class="card-header"><span class="card-num">4.6</span><span class="card-title">Revenue Loss Estimation from Stockouts</span></div>
+  <div class="card-body">
+    <div class="biz-problem"><strong>Business Problem:</strong> Quantify the financial impact of current inventory unavailability to justify investment in improved stock management.</div>
+    <div class="sql-block"><pre><span class="kw">SELECT</span> <span class="fn">ROUND</span>(<span class="fn">SUM</span>(discountedSellingPrice * quantity), 2)
+       <span class="kw">AS</span> potential_revenue_loss
+<span class="kw">FROM</span> zepto
+<span class="kw">WHERE</span> outOfStock = <span class="kw">TRUE</span>;</pre></div>
+    <div class="query-shot"><img src="images/Q3.png" alt="SQL Query Output — Revenue Loss"></div>
+    <div class="insight-row">
+      <div class="insight-box find"><h4>Finding</h4><p>Out-of-stock products represent an estimated <span class="highlight-stat">₹8.91 million</span> in potential revenue loss. This figure underscores that inventory availability is not just an operational metric — it is a direct revenue lever.</p></div>
+      <div class="insight-box suggest"><h4>Analytical Suggestion</h4><p>This ₹8.91M figure should be contextualized against total platform revenue to compute a "stockout revenue leakage rate." If total inventory value is in the hundreds of millions, this loss represents a meaningful but addressable gap that could be closed with targeted replenishment investment and demand forecasting improvements.</p></div>
+    </div>
+  </div>
+</div>
+
+<div class="phase-label">Pricing &amp; Discount Strategy</div>
+
+<div class="analysis-card">
+  <div class="card-header"><span class="card-num">4.7</span><span class="card-title">Average Discount Percentage by Category</span></div>
+  <div class="card-body">
+    <div class="biz-problem"><strong>Business Problem:</strong> Understand which categories are most discount-dependent and evaluate the sustainability of their pricing strategies.</div>
+    <div class="sql-block"><pre><span class="kw">SELECT</span> category,
+       <span class="fn">ROUND</span>(<span class="fn">AVG</span>(discountPercent), 2) <span class="kw">AS</span> avg_discount
+<span class="kw">FROM</span> zepto
+<span class="kw">GROUP BY</span> category
+<span class="kw">ORDER BY</span> avg_discount <span class="kw">DESC</span>;</pre></div>
+    <div class="query-shot"><img src="images/Q4.png" alt="SQL Query Output — Avg Discount"></div>
+    <div class="insight-row">
+      <div class="insight-box find"><h4>Finding</h4><p><span class="highlight-stat">Fruits &amp; Vegetables: 15.46% avg discount</span> — highest across all categories. Home &amp; Cleaning has the lowest at 5.70%. Perishable and commodity categories exhibit significantly higher discount dependency than non-perishable essentials.</p></div>
+      <div class="insight-box suggest"><h4>Analytical Suggestion</h4><p>Discounting in Fruits &amp; Vegetables likely serves a dual function: reducing wastage from perishable inventory and stimulating volume sales. A dynamic markdown strategy — where discount depth increases as products approach expiry — would be more margin-efficient than a blanket average discount approach.</p></div>
+    </div>
+  </div>
+</div>
+
+<div class="analysis-card">
+  <div class="card-header"><span class="card-num">4.8</span><span class="card-title">Category-Wise Margin Retention Analysis</span></div>
+  <div class="card-body">
+    <div class="biz-problem"><strong>Business Problem:</strong> Assess how much of the MRP each category retains after discounting — a proxy for pricing power and margin health.</div>
+    <div class="sql-block"><pre><span class="kw">SELECT</span> category,
+       <span class="fn">ROUND</span>(<span class="fn">AVG</span>(
+           (discountedSellingPrice / mrp) * 100
+       ), 2) <span class="kw">AS</span> price_retention_pct
+<span class="kw">FROM</span> zepto
+<span class="kw">GROUP BY</span> category
+<span class="kw">ORDER BY</span> price_retention_pct <span class="kw">DESC</span>;</pre></div>
+    <div class="insight-row">
+      <div class="insight-box find"><h4>Finding</h4><p><span class="highlight-stat">Home &amp; Cleaning retains ~94% of MRP</span> after discounting, indicating strong pricing power. Fruits &amp; Vegetables retains only ~84% — reflecting the highest discount pressure of any category in the portfolio.</p></div>
+      <div class="insight-box suggest"><h4>Analytical Suggestion</h4><p>High margin retention in Home &amp; Cleaning suggests these products are purchased on need rather than promotion — a sign of inelastic demand. This is a strategically important category for profitability optimization. In contrast, Fruits &amp; Vegetables' low retention warrants a review of whether deep discounting is truly driving incremental volume or simply compressing margins on baseline demand.</p></div>
+    </div>
+  </div>
+</div>
+
+<div class="analysis-card">
+  <div class="card-header"><span class="card-num">4.9</span><span class="card-title">Premium Products With Heavy Discounts</span></div>
+  <div class="card-body">
+    <div class="biz-problem"><strong>Business Problem:</strong> Identify high-MRP products receiving discounts above 30% — which may erode premium brand perception and compress margins on the platform's most valuable SKUs.</div>
+    <div class="sql-block"><pre><span class="kw">SELECT</span> name, category, mrp, discountPercent
+<span class="kw">FROM</span> zepto
+<span class="kw">WHERE</span> mrp > 1000
+  <span class="kw">AND</span> discountPercent > 30
+<span class="kw">ORDER BY</span> discountPercent <span class="kw">DESC</span>;</pre></div>
+    <div class="insight-row">
+      <div class="insight-box find"><h4>Finding</h4><p>A small segment of premium products — primarily specialty cooking oils and baby care items — carry discounts exceeding 30% on MRP above ₹1,000. These represent cases where promotional intensity could undermine the premium positioning these products rely on.</p></div>
+      <div class="insight-box suggest"><h4>Analytical Suggestion</h4><p>For premium SKUs, deep discounting is a double-edged strategy. While it can drive trial and volume uplift, sustained heavy discounts train consumers to wait for promotions, reducing the perceived regular-price value. A "smart promotion" approach — limited-time, targeted to first-time or lapsed buyers — would be more brand-protective than always-on deep discounts.</p></div>
+    </div>
+  </div>
+</div>
+
+<div class="analysis-card">
+  <div class="card-header"><span class="card-num">4.10</span><span class="card-title">Products With No Discount</span></div>
+  <div class="card-body">
+    <div class="biz-problem"><strong>Business Problem:</strong> Identify full-price products — which indicate either strong intrinsic demand, premium positioning, or missed promotional opportunities.</div>
+    <div class="sql-block"><pre><span class="kw">SELECT</span> name, category, mrp
+<span class="kw">FROM</span> zepto
+<span class="kw">WHERE</span> discountPercent = 0;</pre></div>
+    <div class="insight-row">
+      <div class="insight-box find"><h4>Finding</h4><p>A segment of products maintains full MRP pricing with zero discount. These SKUs either benefit from inelastic consumer demand (staple items), strong brand loyalty, or limited promotional budget allocation.</p></div>
+      <div class="insight-box suggest"><h4>Analytical Suggestion</h4><p>Zero-discount products should be analyzed for their sell-through rate. If velocity is high at full price, these are the platform's most profitable SKUs. If velocity is low, even a modest 5–8% introductory discount may unlock latent demand and improve inventory turnover.</p></div>
+    </div>
+  </div>
+</div>
+
+<div class="phase-label">Revenue &amp; Inventory Value</div>
+
+<div class="analysis-card">
+  <div class="card-header"><span class="card-num">4.11</span><span class="card-title">Estimated Revenue by Category</span></div>
+  <div class="card-body">
+    <div class="biz-problem"><strong>Business Problem:</strong> Rank categories by their estimated revenue contribution to identify the platform's top commercial engines.</div>
+    <div class="sql-block"><pre><span class="kw">SELECT</span> category,
+       <span class="fn">ROUND</span>(<span class="fn">SUM</span>(discountedSellingPrice * availableQuantity), 2)
+       <span class="kw">AS</span> estimated_revenue
+<span class="kw">FROM</span> zepto
+<span class="kw">GROUP BY</span> category
+<span class="kw">ORDER BY</span> estimated_revenue <span class="kw">DESC</span>;</pre></div>
+    <div class="query-shot"><img src="images/Q5.png" alt="SQL Query Output — Revenue by Category"></div>
+    <div class="insight-row">
+      <div class="insight-box find"><h4>Finding</h4><p><span class="highlight-stat">Cooking Essentials, Munchies, and Personal Care</span> are the top three revenue-generating categories, each contributing significantly to total estimated platform revenue. These three categories form Zepto's commercial backbone.</p></div>
+      <div class="insight-box suggest"><h4>Analytical Suggestion</h4><p>Revenue concentration in three categories is both a strength and a risk. While these categories should receive prioritized inventory investment and promotional support, Zepto should also develop emerging categories (e.g., Health &amp; Hygiene, Meats &amp; Fish) to diversify revenue streams and reduce dependence on any single segment's performance.</p></div>
+    </div>
+  </div>
+</div>
+
+<div class="analysis-card">
+  <div class="card-header"><span class="card-num">4.12</span><span class="card-title">Category Revenue Contribution Percentage <span class="adv-label">Window Function</span></span></div>
+  <div class="card-body">
+    <div class="biz-problem"><strong>Business Problem:</strong> Calculate each category's proportional share of total platform revenue to understand concentration and diversification.</div>
+    <div class="sql-block"><pre><span class="kw">SELECT</span> category,
+       <span class="fn">ROUND</span>(
+           <span class="fn">SUM</span>(discountedSellingPrice * availableQuantity) * 100.0 /
+           <span class="fn">SUM</span>(<span class="fn">SUM</span>(discountedSellingPrice * availableQuantity)) <span class="kw">OVER</span>(),
+       2) <span class="kw">AS</span> revenue_percentage
+<span class="kw">FROM</span> zepto
+<span class="kw">GROUP BY</span> category
+<span class="kw">ORDER BY</span> revenue_percentage <span class="kw">DESC</span>;</pre></div>
+    <div class="finding-full"><h4>Finding</h4><p>Revenue is heavily concentrated in Cooking Essentials, Munchies, and Personal Care — together accounting for a disproportionate share of total estimated inventory revenue. The window function technique enables accurate percentage computation without a subquery, making it more efficient for large datasets.</p></div>
+    <div class="suggest-full"><h4>Analytical Suggestion</h4><p>A revenue Pareto analysis (80/20 rule) of categories would be a natural next step — identifying the minimum number of categories that generate 80% of revenue. This informs strategic prioritization: which categories need dedicated category managers, which benefit from enhanced promotional spend, and which can be managed with lighter operational oversight.</p></div>
+  </div>
+</div>
+
+<div class="analysis-card">
+  <div class="card-header"><span class="card-num">4.13</span><span class="card-title">Low Average Discount but High Revenue Categories</span></div>
+  <div class="card-body">
+    <div class="biz-problem"><strong>Business Problem:</strong> Identify categories that generate strong revenue without heavy discount dependency — the platform's highest-quality commercial segments.</div>
+    <div class="sql-block"><pre><span class="kw">SELECT</span> category,
+       <span class="fn">ROUND</span>(<span class="fn">AVG</span>(discountPercent), 2) <span class="kw">AS</span> avg_discount,
+       <span class="fn">ROUND</span>(<span class="fn">SUM</span>(discountedSellingPrice * availableQuantity), 2) <span class="kw">AS</span> revenue
+<span class="kw">FROM</span> zepto
+<span class="kw">GROUP BY</span> category
+<span class="kw">HAVING</span> <span class="fn">AVG</span>(discountPercent) < 10
+<span class="kw">ORDER BY</span> revenue <span class="kw">DESC</span>;</pre></div>
+    <div class="insight-row">
+      <div class="insight-box find"><h4>Finding</h4><p>Cooking Essentials (~7.16% avg discount), Munchies, Personal Care, and Home &amp; Cleaning generate strong revenue with below-10% average discounts — indicating these categories sell on the strength of product demand, not promotional stimulation.</p></div>
+      <div class="insight-box suggest"><h4>Analytical Suggestion</h4><p>These categories represent Zepto's highest-quality revenue — they demonstrate pricing power and organic demand. Strategic investment here should focus on expanding SKU depth, improving availability, and enhancing premium product representation rather than increasing promotional spend.</p></div>
+    </div>
+  </div>
+</div>
+
+<div class="phase-label">Product Segmentation</div>
+
+<div class="analysis-card">
+  <div class="card-header"><span class="card-num">4.14</span><span class="card-title">Price Range Segmentation (Product Buckets)</span></div>
+  <div class="card-body">
+    <div class="biz-problem"><strong>Business Problem:</strong> Classify the product portfolio by price tier to understand Zepto's market positioning and the affordability profile of its catalog.</div>
+    <div class="sql-block"><pre><span class="kw">SELECT</span>
+    <span class="kw">CASE</span>
+        <span class="kw">WHEN</span> discountedSellingPrice < 100 <span class="kw">THEN</span> <span class="str">'Budget'</span>
+        <span class="kw">WHEN</span> discountedSellingPrice <span class="kw">BETWEEN</span> 100 <span class="kw">AND</span> 500 <span class="kw">THEN</span> <span class="str">'Mid-Range'</span>
+        <span class="kw">WHEN</span> discountedSellingPrice <span class="kw">BETWEEN</span> 500 <span class="kw">AND</span> 1000 <span class="kw">THEN</span> <span class="str">'High'</span>
+        <span class="kw">ELSE</span> <span class="str">'Luxury'</span>
+    <span class="kw">END AS</span> price_segment,
+    <span class="fn">COUNT</span>(*) <span class="kw">AS</span> total_products
+<span class="kw">FROM</span> zepto
+<span class="kw">GROUP BY</span> price_segment;</pre></div>
+    <div class="query-shot"><img src="images/Q6.png" alt="SQL Query Output — Price Segmentation"></div>
+    <div class="insight-row">
+      <div class="insight-box find"><h4>Finding</h4><p>Budget (1,837 products) and Mid-Range (1,782) together account for ~97% of the catalog. Only 98 products fall in the High tier and 14 in Luxury — confirming Zepto's clear mass-market, affordability-first positioning.</p></div>
+      <div class="insight-box suggest"><h4>Analytical Suggestion</h4><p>The near-absence of a Luxury segment (0.4% of SKUs) may be an intentional strategic choice for a quick-commerce platform competing on speed and price. However, as Zepto expands into Tier-1 metro premium corridors, a curated "premium aisle" strategy — 50–80 luxury SKUs across select categories — could increase average order value and attract higher-income customer cohorts.</p></div>
+    </div>
+  </div>
+</div>
+
+<div class="analysis-card">
+  <div class="card-header"><span class="card-num">4.15</span><span class="card-title">Weight-Based Revenue Contribution</span></div>
+  <div class="card-body">
+    <div class="biz-problem"><strong>Business Problem:</strong> Understand how product pack size (by weight) correlates with revenue generation — informing inventory and packaging strategy.</div>
+    <div class="sql-block"><pre><span class="kw">SELECT</span>
+   <span class="kw">CASE</span>
+       <span class="kw">WHEN</span> weightInGms < 500 <span class="kw">THEN</span> <span class="str">'Small Pack'</span>
+       <span class="kw">WHEN</span> weightInGms <span class="kw">BETWEEN</span> 500 <span class="kw">AND</span> 2000 <span class="kw">THEN</span> <span class="str">'Medium Pack'</span>
+       <span class="kw">ELSE</span> <span class="str">'Bulk Pack'</span>
+   <span class="kw">END AS</span> weight_segment,
+   <span class="fn">ROUND</span>(<span class="fn">SUM</span>(discountedSellingPrice * availableQuantity), 2) <span class="kw">AS</span> revenue
+<span class="kw">FROM</span> zepto
+<span class="kw">GROUP BY</span> weight_segment
+<span class="kw">ORDER BY</span> revenue <span class="kw">DESC</span>;</pre></div>
+    <div class="query-shot"><img src="images/Q7.png" alt="SQL Query Output — Weight Revenue"></div>
+    <div class="insight-row">
+      <div class="insight-box find"><h4>Finding</h4><p>Small Pack products generate the highest revenue at <span class="highlight-stat">~₹1.43 million</span>, far outpacing Medium (~₹651K) and Bulk (~₹162K) formats. This confirms that Zepto's consumer base purchases in small, frequent quantities rather than in bulk.</p></div>
+      <div class="insight-box suggest"><h4>Analytical Suggestion</h4><p>Small-pack dominance is structurally aligned with the quick-commerce use case — consumers on Zepto are solving an immediate need, not stocking up. Inventory strategy should maximize SKU depth in sub-500g formats, especially in Munchies, Dairy, and Packaged Food. Bulk formats may need repositioning as a value offering ("bulk buy, save more") to improve their revenue contribution.</p></div>
+    </div>
+  </div>
+</div>
+
+<div class="analysis-card">
+  <div class="card-header"><span class="card-num">4.16</span><span class="card-title">Price Per Gram Analysis (Value for Money)</span></div>
+  <div class="card-body">
+    <div class="biz-problem"><strong>Business Problem:</strong> Compute a unit-normalized price metric (price per gram) to assess which products offer superior consumer value — a key driver of purchase decisions in commodity categories.</div>
+    <div class="sql-block"><pre><span class="kw">SELECT DISTINCT</span> name, weightInGms,
+       discountedSellingPrice,
+       <span class="fn">ROUND</span>(discountedSellingPrice / weightInGms, 2)
+       <span class="kw">AS</span> price_per_gram
+<span class="kw">FROM</span> zepto
+<span class="kw">WHERE</span> weightInGms >= 100
+<span class="kw">ORDER BY</span> price_per_gram <span class="kw">ASC</span>;</pre></div>
+    <div class="insight-row">
+      <div class="insight-box find"><h4>Finding</h4><p>Staple grocery products — salt, onions, potatoes — offer the lowest price per gram, reflecting their commodity nature. This metric confirms that Zepto's affordability proposition is strongest in its staple produce and cooking staple categories.</p></div>
+      <div class="insight-box suggest"><h4>Analytical Suggestion</h4><p>Price-per-gram normalization is a powerful consumer-facing transparency tool as well as an internal pricing audit mechanism. Internally, anomalies (e.g., a 100g pack more expensive per gram than a 500g pack from the same brand) should trigger pricing rule reviews to prevent consumer-facing inconsistencies.</p></div>
+    </div>
+  </div>
+</div>
+
+<div class="phase-label">Fast-Moving &amp; Demand Signals</div>
+
+<div class="analysis-card">
+  <div class="card-header"><span class="card-num">4.17</span><span class="card-title">Fast-Moving Product Identification (Proxy Logic)</span></div>
+  <div class="card-body">
+    <div class="biz-problem"><strong>Business Problem:</strong> In the absence of sales velocity data, use a combination of low stock, high discount, and in-stock status as a proxy to identify high-demand products at risk of stockout.</div>
+    <div class="sql-block"><pre><span class="kw">SELECT</span> name, category, availableQuantity, discountPercent
+<span class="kw">FROM</span> zepto
+<span class="kw">WHERE</span> availableQuantity < 20
+  <span class="kw">AND</span> discountPercent > 20
+  <span class="kw">AND</span> outOfStock = <span class="kw">FALSE</span>
+<span class="kw">ORDER BY</span> availableQuantity <span class="kw">ASC</span>;</pre></div>
+    <div class="finding-full"><h4>Finding</h4><p>Products matching all three conditions — limited remaining stock, high promotional discount, and not yet marked out of stock — include items from Packaged Food, Biscuits, Cooking Essentials, Dairy, and Personal Care. These are likely in the final phase of their replenishment cycle and represent imminent stockout risks.</p></div>
+    <div class="suggest-full"><h4>Analytical Suggestion</h4><p>This proxy logic is a practical workaround when point-of-sale velocity data is unavailable. For production use, this query should be scheduled to run daily as an automated early-warning dashboard for supply chain teams. Integrating this with a replenishment trigger — automatically generating a purchase order when both conditions are met — would convert a reactive insight into a proactive operational workflow.</p></div>
+  </div>
+</div>
+
+<div class="analysis-card">
+  <div class="card-header"><span class="card-num">4.18</span><span class="card-title">Low Inventory, High-Price Products (Revenue-at-Risk)</span></div>
+  <div class="card-body">
+    <div class="biz-problem"><strong>Business Problem:</strong> Premium products with critically low stock represent a concentrated revenue risk — high loss per unit if they go out of stock.</div>
+    <div class="sql-block"><pre><span class="kw">SELECT</span> name, category, discountedSellingPrice, availableQuantity
+<span class="kw">FROM</span> zepto
+<span class="kw">WHERE</span> discountedSellingPrice > 500
+  <span class="kw">AND</span> availableQuantity < 10
+<span class="kw">ORDER BY</span> discountedSellingPrice <span class="kw">DESC</span>;</pre></div>
+    <div class="insight-row">
+      <div class="insight-box find"><h4>Finding</h4><p>Multiple premium SKUs (cooking oils, ghee, baby care, personal care) have fewer than 10 units remaining and a selling price above ₹500. Each lost sale from these products represents a high per-unit revenue miss.</p></div>
+      <div class="insight-box suggest"><h4>Analytical Suggestion</h4><p>Calculate the total revenue at risk from this segment (selling price × remaining units for each qualifying product). This creates a prioritized "watch list" for operations teams. Premium products in this risk zone should have higher safety stock thresholds — e.g., minimum 25 units rather than the standard threshold — to buffer against demand spikes and delivery delays.</p></div>
+    </div>
+  </div>
+</div>
+
+<hr class="section-divider">
+
+<!-- SECTION 5 -->
+<div class="section-header">
+  <div class="section-num">5</div>
+  <div class="section-title">Advanced SQL Analysis</div>
+</div>
+
+<div class="analysis-card">
+  <div class="card-header"><span class="card-num">5.1</span><span class="card-title">Intra-Category Discount Ranking <span class="adv-label">Window Function</span></span></div>
+  <div class="card-body">
+    <div class="biz-problem"><strong>Business Problem:</strong> Within each category, rank products by discount depth to identify the most aggressively promoted items and assess whether promotional intensity is consistent or concentrated in a few SKUs.</div>
+    <div class="sql-block"><pre><span class="kw">SELECT</span> category, name, discountPercent,
+       <span class="fn">RANK</span>() <span class="kw">OVER</span>(
+           <span class="kw">PARTITION BY</span> category
+           <span class="kw">ORDER BY</span> discountPercent <span class="kw">DESC</span>
+       ) <span class="kw">AS</span> discount_rank
+<span class="kw">FROM</span> zepto;</pre></div>
+    <div class="insight-row">
+      <div class="insight-box find"><h4>Finding</h4><p>Beverages category contains multiple products sharing the top discount rank at 50%, indicating that promotional pricing is broadly applied across many SKUs rather than concentrated in a few — suggesting category-level promotional strategies rather than product-specific ones.</p></div>
+      <div class="insight-box suggest"><h4>Analytical Suggestion</h4><p>Category-level discount uniformity may indicate blanket trade promotions from brand partners rather than data-driven, demand-responsive pricing. Shifting toward SKU-level dynamic pricing — where only the lowest-velocity products receive maximum discounts — would preserve margins on high-velocity items while still moving slow-moving stock.</p></div>
+    </div>
+  </div>
+</div>
+
+<div class="analysis-card">
+  <div class="card-header"><span class="card-num">5.2</span><span class="card-title">Running Revenue Cumulation <span class="adv-label">Window Function</span></span></div>
+  <div class="card-body">
+    <div class="biz-problem"><strong>Business Problem:</strong> Analyze cumulative revenue contribution as products are ranked by selling price — identifying what proportion of total platform revenue is driven by the highest-priced items.</div>
+    <div class="sql-block"><pre><span class="kw">SELECT</span> name, discountedSellingPrice,
+       <span class="fn">SUM</span>(discountedSellingPrice)
+       <span class="kw">OVER</span>(<span class="kw">ORDER BY</span> discountedSellingPrice <span class="kw">DESC</span>)
+       <span class="kw">AS</span> running_total
+<span class="kw">FROM</span> zepto;</pre></div>
+    <div class="insight-row">
+      <div class="insight-box find"><h4>Finding</h4><p>Running totals reveal that premium products — edible oils, ghee, baby care — contribute disproportionately to cumulative revenue accumulation. The revenue curve is steep at the high-price end, confirming that a small number of expensive SKUs carry significant weight in total platform revenue.</p></div>
+      <div class="insight-box suggest"><h4>Analytical Suggestion</h4><p>This running total analysis is the foundation for a proper revenue concentration analysis (Lorenz curve / Gini coefficient for SKUs). Identifying the top 10% of SKUs by price and computing their share of total revenue would clarify how sensitive platform revenue is to stockouts in the premium tier.</p></div>
+    </div>
+  </div>
+</div>
+
+<div class="analysis-card">
+  <div class="card-header"><span class="card-num">5.3</span><span class="card-title">Discount Aggressiveness by Category (Full Profile)</span></div>
+  <div class="card-body">
+    <div class="biz-problem"><strong>Business Problem:</strong> Build a comprehensive discount profile per category — combining average, maximum, and SKU count — to evaluate promotional strategy intensity.</div>
+    <div class="sql-block"><pre><span class="kw">SELECT</span> category,
+       <span class="fn">COUNT</span>(*) <span class="kw">AS</span> total_products,
+       <span class="fn">ROUND</span>(<span class="fn">AVG</span>(discountPercent), 2) <span class="kw">AS</span> avg_discount,
+       <span class="fn">MAX</span>(discountPercent) <span class="kw">AS</span> max_discount
+<span class="kw">FROM</span> zepto
+<span class="kw">GROUP BY</span> category
+<span class="kw">ORDER BY</span> avg_discount <span class="kw">DESC</span>;</pre></div>
+    <div class="finding-full"><h4>Finding</h4><p>Fruits &amp; Vegetables (15.46% avg, max ~50%), Meats &amp; Fish (&gt;11% avg), and Packaged Food show the highest promotional intensity. Biscuits records the single highest individual discount at 51%. Home &amp; Cleaning (5.70% avg) and Personal Care maintain the most stable pricing across their catalog.</p></div>
+    <div class="suggest-full"><h4>Analytical Suggestion</h4><p>A high gap between average and maximum discount within a category (e.g., avg 11% but max 50% in Meats &amp; Fish) indicates bimodal discount distribution — most products are lightly discounted while a few carry extreme promotions. Segmenting by discount quartile within each category would clarify the promotional structure and help rationalize discount spend.</p></div>
+  </div>
+</div>
+
+<div class="analysis-card">
+  <div class="card-header"><span class="card-num">5.4</span><span class="card-title">Highest Inventory Value Per Product</span></div>
+  <div class="card-body">
+    <div class="biz-problem"><strong>Business Problem:</strong> Identify products where the current inventory represents the largest capital commitment — i.e., where unsold stock would result in the highest financial exposure.</div>
+    <div class="sql-block"><pre><span class="kw">SELECT</span> name, category,
+       <span class="fn">ROUND</span>(mrp * availableQuantity, 2) <span class="kw">AS</span> inventory_value
+<span class="kw">FROM</span> zepto
+<span class="kw">ORDER BY</span> inventory_value <span class="kw">DESC</span>
+<span class="kw">LIMIT</span> 20;</pre></div>
+    <div class="insight-row">
+      <div class="insight-box find"><h4>Finding</h4><p>Borges Extra Light Olive Oil Bottle (₹15,600 inventory value) leads the list. Premium edible oils, ghee, and Pampers variants dominate the top 20, collectively representing a large concentration of capital in high-value product types.</p></div>
+      <div class="insight-box suggest"><h4>Analytical Suggestion</h4><p>High inventory value per SKU creates carrying cost risk. Establishing a maximum-stock threshold for the top 20 inventory-value SKUs — tied to a rolling 30-day sales velocity estimate — would control capital exposure and reduce the risk of high-value write-offs.</p></div>
+    </div>
+  </div>
+</div>
+
+<hr class="section-divider">
+
+<!-- SECTION 6 -->
+<div class="section-header">
+  <div class="section-num">6</div>
+  <div class="section-title">Strategic Recommendations</div>
+</div>
+
+<div class="rec-item">
+  <div class="rec-icon">01</div>
+  <div class="rec-text">
+    <h4>Implement Tiered Replenishment SLAs by Category Risk</h4>
+    <p>Biscuits (28.6% OOS rate) and Beverages require an accelerated restocking cycle. Set automated low-stock triggers at 20% remaining inventory — not 0% — for the top 5 highest-stockout categories. This converts reactive restocking into proactive supply chain management.</p>
+  </div>
+</div>
+
+<div class="rec-item">
+  <div class="rec-icon">02</div>
+  <div class="rec-text">
+    <h4>Deploy Dynamic Markdown Pricing for Perishables</h4>
+    <p>Replace blanket discounts in Fruits &amp; Vegetables with a time-sensitive markdown system where discount depth increases progressively as products approach end-of-shelf-life. This improves margin capture during early availability while still clearing inventory before expiry.</p>
+  </div>
+</div>
+
+<div class="rec-item">
+  <div class="rec-icon">03</div>
+  <div class="rec-text">
+    <h4>Protect Premium SKU Inventory with Higher Safety Stock</h4>
+    <p>Premium products (MRP &gt;₹500) with fewer than 10 available units represent a disproportionate revenue risk per stockout event. Establish a minimum safety stock of 25 units for SKUs in this tier, and create a dedicated priority replenishment workflow for this segment.</p>
+  </div>
+</div>
+
+<div class="rec-item">
+  <div class="rec-icon">04</div>
+  <div class="rec-text">
+    <h4>Shift Premium Products from Always-On Discounts to Targeted Promotions</h4>
+    <p>High-MRP products (&gt;₹1,000) currently receiving 30%+ discounts risk long-term margin erosion and brand dilution. Transition these to occasion-based promotions (first purchase, app-exclusive offers) rather than catalog-wide permanent markdowns.</p>
+  </div>
+</div>
+
+<div class="rec-item">
+  <div class="rec-icon">05</div>
+  <div class="rec-text">
+    <h4>Expand Small-Pack Depth Across High-Revenue Categories</h4>
+    <p>Small packs (under 500g) generate the highest revenue segment (~₹1.43M). Investment in deeper SKU assortment within the small-pack format — particularly in Munchies, Dairy, and Packaged Food — is directly aligned with demonstrated consumer purchase behavior on the platform.</p>
+  </div>
+</div>
+
+<div class="rec-item">
+  <div class="rec-icon">06</div>
+  <div class="rec-text">
+    <h4>Operationalize the Fast-Moving Product Query as a Daily Alert</h4>
+    <p>Schedule the fast-mover proxy query (low stock + high discount + in-stock) as an automated daily report to supply chain and category management teams. Integrate with purchasing workflows to trigger supplier purchase orders when critical thresholds are breached.</p>
+  </div>
+</div>
+
+<hr class="section-divider">
+
+<!-- CONCLUSION -->
+<div class="conclusion">
+  <h3>Conclusion</h3>
+  <p>This SQL-based business analysis of Zepto's inventory dataset reveals a platform that is strategically well-positioned as a mass-market, FMCG-focused quick-commerce player with strong pricing discipline in its core categories. The analysis identifies <strong>₹8.91 million in at-risk revenue</strong> from stockouts, structural availability gaps in high-velocity categories (Biscuits, Beverages), and clear consumer preference for small-pack and budget-to-mid-range price formats. The platform's most commercially valuable categories — Cooking Essentials, Munchies, and Personal Care — demonstrate the ability to generate high revenue with below-average discount dependency, signaling genuine pricing power. Addressing the identified stockout concentration, rationalizing discount strategies in perishable categories, and protecting premium SKU inventory are the highest-impact actions available to meaningfully improve both top-line revenue and operational margin. The SQL techniques applied — aggregate analysis, window functions, conditional segmentation, and proxy-based demand estimation — demonstrate a comprehensive analytical framework transferable to any inventory or pricing dataset in the FMCG/e-commerce domain.</p>
+</div>
+
+<hr class="section-divider">
+
+<!-- FOOTER -->
+<div class="footer-links">
+  <h3>Project Links</h3>
+  <div class="link-grid">
+    <a href="https://github.com/saimmi/zepto-sql-business-analysis" target="_blank" class="social-card">
+      <div class="social-title">GitHub Repository</div>
+      <div class="social-sub">SQL queries, HTML case study, screenshots &amp; project files</div>
+    </a>
+    <a href="https://www.linkedin.com/in/s-nisha-31a78b212/" target="_blank" class="social-card">
+      <div class="social-title">LinkedIn Profile</div>
+      <div class="social-sub">Connect with me professionally</div>
+    </a>
+  </div>
+</div>
+
+</div>
+</body>
+</html>
