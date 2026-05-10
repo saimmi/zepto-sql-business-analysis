@@ -370,5 +370,6 @@ This analysis demonstrates that Zepto's business model is primarily:
 ## Project Links
 
 - 📁 [GitHub Repository](https://github.com/saimmi/zepto-sql-business-analysis)
+- 📝 [Blog / Case Study](https://saimmi.github.io/zepto-sql-business-analysis/)
 - 💼 [LinkedIn Profile](https://www.linkedin.com/in/s-nisha-31a78b212/)
 
