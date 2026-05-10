@@ -198,19 +198,6 @@ This repository includes:
 
 ---
 
-# 📷 Project Screenshots
-
-## Revenue Analysis
-![Revenue Analysis](Screenshots/revenue_analysis.png)
-
-## Discount Analysis
-![Discount Analysis](Screenshots/discount_analysis.png)
-
-## Inventory Analysis
-![Inventory Analysis](Screenshots/inventory_analysis.png)
-
----
-
 # 📌 Skills Demonstrated
 
 - SQL Query Writing
@@ -236,3 +223,4 @@ The analysis showcases how SQL can transform raw business data into actionable i
 
 # ⭐ If You Found This Project Useful
 Feel free to star the repository and connect with me on LinkedIn.
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-Connect-blue?style=for-the-badge&logo=linkedin)](https://www.linkedin.com/in/s-nisha-31a78b212/)
